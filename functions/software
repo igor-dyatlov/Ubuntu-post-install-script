@@ -1,0 +1,33 @@
+#!/bin/bash
+
+dir="$(dirname "$0")"
+
+source $dir/functions/third-party-data/thirdparty-theme-data/cursor
+source $dir/functions/third-party-data/thirdparty-theme-data/font
+source $dir/functions/third-party-data/thirdparty-theme-data/icon
+source $dir/functions/third-party-data/thirdparty-theme-data/plank
+source $dir/functions/third-party-data/thirdparty-theme-data/theme
+
+# Install Third-Party Theme
+function software {
+    eval `resize`
+    SOFTWARE=$(whiptail \
+        --notags \
+        --title "Third-Party Installation" \
+        --menu "\nWhat third-party theme would you like to install?" \
+        --ok-button "Install" \
+        --cancel-button "Go Back" \
+        $LINES $COLUMNS $(( $LINES - 12 )) \
+        favourites 'Install favourite applications' \
+        utilities 'Install favourite system utilities' \
+        development 'Install favourite development tools' \
+        codecs 'Install Ubuntu Restricted Extras' \
+        3>&1 1>&2 2>&3)
+
+    exitstatus=$?
+    if [ $exitstatus = 0 ]; then
+        clear && $SOFTWARE
+    else
+        clear && main
+    fi
+}

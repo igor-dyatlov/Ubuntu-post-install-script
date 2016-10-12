@@ -1,0 +1,28 @@
+#!/bin/bash
+
+dir="$(dirname "$0")"
+
+source $dir/functions/kernel-data/stable/v4.8-stable
+source $dir/functions/kernel-data/unstable/v4.8-unstable
+
+# Kernel system upgrade
+function kernel-4.8 {
+  eval `resize`
+  KERNELALL48=$(whiptail \
+    --notags \
+    --title 'Update system kernel' \
+    --menu '\nWhat would you like to do?' \
+    --ok-button 'Update' \
+    --cancel-button 'Go Back' \
+  $LINES $COLUMNS $(( $LINES - 12 )) \
+    v4.8-stable 'Update stable (v4.8) kernel (need reboot)' \
+    v4.8-unstable 'Update unstable (v4.8) kernel (need reboot)' \
+  3>&1 1>&2 2>&3)
+
+exitstatus=$?
+  if [ $exitstatus = 0 ]; then
+    clear && $KERNELALL48
+  else
+    clear && main
+  fi
+}

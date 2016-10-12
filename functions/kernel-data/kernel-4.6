@@ -1,0 +1,31 @@
+#!/bin/bash
+
+dir="$(dirname "$0")"
+
+source $dir/functions/kernel-data/stable/v4.6-stable
+source $dir/functions/kernel-data/stable/v4.6-yakkety-stable
+source $dir/functions/kernel-data/unstable/v4.6-wily-unstable
+source $dir/functions/kernel-data/unstable/v4.6-yakkety-unstable
+
+# Kernel system upgrade
+function kernel-4.6 {
+  eval `resize`
+  KERNELALL46=$(whiptail \
+    --notags \
+    --title 'Update system kernel' \
+    --menu '\nWhat would you like to do?' \
+    --ok-button 'Update' \
+    --cancel-button 'Go Back' \
+  $LINES $COLUMNS $(( $LINES - 12 )) \
+    v4.6-yakkety-stable 'Update stable (v4.6-yakkety) kernel (need reboot)' \
+    v4.6-wily-unstable 'Update unstable (v4.6-wily) kernel (need reboot)' \
+    v4.6-yakkety-unstable 'Update unstable (v4.6-yakkety) kernel (need reboot)' \
+  3>&1 1>&2 2>&3)
+
+exitstatus=$?
+  if [ $exitstatus = 0 ]; then
+    clear && $KERNELALL46
+  else
+    clear && main
+  fi
+}

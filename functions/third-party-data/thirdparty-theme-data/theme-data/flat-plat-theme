@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Flat-Plat Theme
+function flat-plat-theme {
+  show_info 'Downloading Flat-Plat Theme...'
+	wget --referer=https://github.com/nana-4/Flat-Plat/releases/download/v3.20.20160821/Flat-Plat-3.20.20160821.tar.gz https://github.com/nana-4/Flat-Plat/releases/download/v3.20.20160821/Flat-Plat-3.20.20160821.tar.gz
+	# Extraction package(s)
+  show_info 'Extraction Flat-Plat Theme...'
+  tar -xvf Flat-Plat*.tar.gz
+  # Install package(s)
+  show_info 'Installing Flat-Plat Theme...'
+  show_warning 'Requires root privileges'
+  sudo cp -R ./Flat-Plat/ /usr/share/themes/
+  sudo chmod -R 755 /usr/share/themes/Flat-Plat
+  show_info 'Installing gnome-shell mod...'
+  show_warning 'Requires root privileges'
+  # Backup gnome-shell-theme.gresource
+  sudo cp /usr/share/gnome-shell/gnome-shell-theme.gresource /usr/share/gnome-shell/gnome-shell-theme.gresource.backup
+  sudo cp /usr/share/themes/Flat-Plat/gnome-shell/gnome-shell-theme.gresource /usr/share/gnome-shell
+  #sudo rm /usr/share/gnome-shell/gnome-shell-theme.gresource
+  #sudo mv -f /usr/share/gnome-shell/gnome-shell-theme.gresource.backup /usr/share/gnome-shell/gnome-shell-theme.gresource
+  # Cleanup and finish
+  rm -rf Flat-Plat Flat-Plat*.tar.gz
+  # Apply
+  show_info 'Apply Theme...'
+  gsettings set org.gnome.desktop.interface gtk-theme 'Flat-Plat'
+  gsettings set org.gnome.shell.extensions.user-theme name 'Flat-Plat'
+  # Done
+  show_success 'Done.'
+  whiptail --title "Finished" --msgbox "Installation complete." 8 78
+  thirdparty-theme
+}

@@ -1,0 +1,4 @@
+sudo add-apt-repository ppa:alexx2000/doublecmd
+sudo apt update
+sudo apt install doublecmd-gtk
+sudo apt-get install doublecmd-qt

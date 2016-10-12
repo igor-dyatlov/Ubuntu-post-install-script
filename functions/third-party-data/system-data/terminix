@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Terminix
+function terminix {
+  # Add repository
+  show_info 'Adding Terminix PPA to software sources...'
+  show_warning 'Requires root privileges'
+  sudo add-apt-repository -y ppa:webupd8team/terminix
+  # Update repository information
+  show_info 'Updating repository information...'
+  show_warning 'Requires root privileges'
+  sudo apt-get update
+  # Install
+  show_info 'Installing Terminix...'
+  show_warning 'Requires root privileges'
+  sudo apt-get install -y terminix
+  # Install dependencies
+  show_info 'Installing python nautilus dependencies...'
+  show_warning 'Requires root privileges'
+  sudo apt-get install -y python-nautilus
+  # Done
+  show_success 'Done.'
+  whiptail --title "Finished" --msgbox "Installation complete." 8 78
+  thirdparty
+}

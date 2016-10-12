@@ -1,0 +1,109 @@
+#!/bin/bash
+
+# Kernel stable
+function v4.6.4 {
+	if (whiptail --title "Update system kernel" --yesno "Proceed with kernel update?" 10 60) then
+		# Download Debian file that matches system architecture
+		case `uname -i` in
+			i386|i486|i586|i686)
+				wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.6.4/linux-headers-4.6.4-040604-generic_4.6.4-040604.201607111332_i386.deb
+				wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.6.4/linux-headers-4.6.4-040604_4.6.4-040604.201607111332_all.deb
+				wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.6.4/linux-image-4.6.4-040604-generic_4.6.4-040604.201607111332_i386.deb
+			;;
+			x86_64)
+				wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.6.4/linux-headers-4.6.4-040604-generic_4.6.4-040604.201607111332_amd64.deb
+				wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.6.4/linux-headers-4.6.4-040604_4.6.4-040604.201607111332_all.deb
+				wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.6.4/linux-image-4.6.4-040604-generic_4.6.4-040604.201607111332_amd64.deb
+			;;
+			*)
+				show_error "No packages available to download that matches your system." && kernel
+			;;
+		esac
+		# Update repository information
+		show_info 'Download and install...'
+		show_warning 'Requires root privileges'
+		sudo dpkg -i linux-*.deb
+		sudo apt-get install -fy
+		# Grub-Update
+		show_info 'Grub configuration update...'
+		show_warning 'Requires root privileges'
+		sudo update-grub
+		# Cleanup and finish
+		rm linux-*.deb
+		# Reboot
+		show_info 'Rebooting in 1 minute...'
+		show_warning 'Save all files and exit the program!'
+		sudo shutdown -r +1
+		# Done
+		show_success 'Done.'
+		whiptail --title "Finished" --msgbox "Kernel update complete." 8 78
+		main
+	else
+		clear && main
+	fi
+}
+
+# Kernel stable
+function v4.6.5 {
+	if (whiptail --title "Update system kernel" --yesno "Proceed with kernel update?" 10 60) then
+		# Download Debian file that matches system architecture
+		case `uname -i` in
+			i386|i486|i586|i686)
+				wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.6.5/linux-headers-4.6.5-040605-generic_4.6.5-040605.201607271333_i386.deb
+				wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.6.5/linux-headers-4.6.5-040605_4.6.5-040605.201607271333_all.deb
+				wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.6.5/linux-image-4.6.5-040605-generic_4.6.5-040605.201607271333_i386.deb
+			;;
+			x86_64)
+				wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.6.5/linux-headers-4.6.5-040605-generic_4.6.5-040605.201607271333_amd64.deb
+				wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.6.5/linux-headers-4.6.5-040605_4.6.5-040605.201607271333_all.deb
+				wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.6.5/linux-image-4.6.5-040605-generic_4.6.5-040605.201607271333_amd64.deb
+			;;
+			*)
+				show_error "No packages available to download that matches your system." && kernel
+			;;
+		esac
+		# Update repository information
+		show_info 'Download and install...'
+		show_warning 'Requires root privileges'
+		sudo dpkg -i linux-*.deb
+		sudo apt-get install -fy
+		# Grub-Update
+		show_info 'Grub configuration update...'
+		show_warning 'Requires root privileges'
+		sudo update-grub
+		# Cleanup and finish
+		rm linux-*.deb
+		# Reboot
+		show_info 'Rebooting in 1 minute...'
+		show_warning 'Save all files and exit the program!'
+		sudo shutdown -r +1
+		# Done
+		show_success 'Done.'
+		whiptail --title "Finished" --msgbox "Kernel update complete." 8 78
+		main
+	else
+		clear && main
+	fi
+}
+
+# Kernel system upgrade
+function v4.6-stable {
+	eval `resize`
+	KERNEL46S=$(whiptail \
+		--notags \
+		--title 'Update system kernel' \
+		--menu '\nWhat would you like to do?' \
+		--ok-button 'Update' \
+		--cancel-button 'Go Back' \
+	$LINES $COLUMNS $(( $LINES - 12 )) \
+		v4.6.4 'Update stable (v4.6.4) kernel (need reboot)' \
+		v4.6.5 'Update stable (v4.6.5) kernel (need reboot)' \
+	3>&1 1>&2 2>&3)
+
+exitstatus=$?
+	if [ $exitstatus = 0 ]; then
+		clear && $KERNEL46S
+	else
+		clear && main
+	fi
+}
